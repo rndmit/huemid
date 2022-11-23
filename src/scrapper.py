@@ -2,8 +2,8 @@ import os
 import logging
 import base64
 import pathlib
-import time
-from selenium.webdriver import Firefox, FirefoxOptions
+# from selenium.webdriver import Chrome, ChromeOptions
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from anticaptchaofficial.imagecaptcha import imagecaptcha
@@ -17,9 +17,10 @@ class Scrapper():
     def __init__(self) -> None:
         self.logger = logging.getLogger("main")
         self.logger.info('Initializing Scrapper')
-        opts = FirefoxOptions()
-        opts.headless = True
-        self.browser = Firefox(options=opts)
+        # opts = ChromeOptions()
+        # opts.headless = False
+        # self.browser = Chrome(options=opts)
+        self.browser = uc.Chrome()
 
         self.solver = imagecaptcha()
         self.solver.set_verbose(0)
@@ -55,7 +56,7 @@ class Scrapper():
 
         result_dst = pathlib.PurePath(os.getcwd(), 'results', run_id).with_suffix('.png')
         self.logger.info(f'Saving result to {result_dst}')
-        self.browser.get_full_page_screenshot_as_file(result_dst.__str__())
+        self.browser.get_screenshot_as_file(result_dst.__str__())
         self.logger.info(f'Run {run_id} finished')
         return
 
